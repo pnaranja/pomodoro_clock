@@ -41,6 +41,7 @@ initModel =
 
 -- UPDATE
 
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -83,11 +84,12 @@ decrementMin model =
 
 -- VIEW
 
+
 view : Model -> Html Msg
 view model =
     div []
         [ div [ style [ ( "font-size", "60px" ) ] ]
-            [ text <| (toString model.min) ++ ":" ++ (toString model.secs) ]
+            [ text <| padSingleDigit model.min ++ ":" ++ padSingleDigit model.secs ]
         , button
             [ style
                 [ ( "width", "100px" )
@@ -108,6 +110,14 @@ view model =
         ]
 
 
+padSingleDigit : Int -> String
+padSingleDigit i =
+    if i < 10 then
+        String.padLeft 2 '0' <| toString i
+    else
+        toString i
+
+
 
 -- SUBSCRIPTIONS
 
@@ -125,7 +135,7 @@ main =
 
 -- Erin's Tutorial Part
 -- keyButton label =
---     button [ style [ ( "width", "50px" ) ] ]
+--     button [ style [ ( "width", "50px"  ] ]
 --         [ text label ]
 --
 --
