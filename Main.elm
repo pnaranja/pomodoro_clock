@@ -16,7 +16,8 @@ import String
 
 
 type alias Model =
-    { time : Time
+    { min : Int
+    , secs : Int
     , mode : Mode
     }
 
@@ -34,22 +35,20 @@ type Msg
 
 initModel : ( Model, Cmd Msg )
 initModel =
-    ( { time = 30, mode = Stop }, Cmd.none )
+    ( { min = 1, secs = 5, mode = Stop }, Cmd.none )
 
 
 
 -- UPDATE
 
-
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Tick newTime ->
-            if model.mode == Start
-            then
-                ( { model | time = newTime }, Cmd.none )
+            if model.mode == Start then
+                ( decrementClock model, Cmd.none )
             else
-                (model,Cmd.none)
+                ( model, Cmd.none )
 
         StartClock ->
             ( { model | mode = Start }, Cmd.none )
@@ -58,15 +57,37 @@ update msg model =
             ( { model | mode = Stop }, Cmd.none )
 
 
+decrementClock : Model -> Model
+decrementClock =
+    decrementMin << decrementSec
+
+
+decrementSec : Model -> Model
+decrementSec model =
+    if model.secs == 0 && model.min > 0 then
+        { model | secs = 59 }
+    else if model.secs > 0 then
+        { model | secs = model.secs - 1 }
+    else
+        model
+
+
+decrementMin : Model -> Model
+decrementMin model =
+    if model.secs == 59 && model.min > 0 then
+        { model | min = model.min - 1 }
+    else
+        model
+
+
 
 -- VIEW
-
 
 view : Model -> Html Msg
 view model =
     div []
         [ div [ style [ ( "font-size", "60px" ) ] ]
-            [ text <| toString <| 60 - (Date.second <| Date.fromTime <| model.time) ]
+            [ text <| (toString model.min) ++ ":" ++ (toString model.secs) ]
         , button
             [ style
                 [ ( "width", "100px" )
