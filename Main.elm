@@ -88,8 +88,15 @@ decrementMin model =
 view : Model -> Html Msg
 view model =
     div []
-        [ div [ style [ ( "font-size", "60px" ) ] ]
-            [ text <| padSingleDigit model.min ++ ":" ++ padSingleDigit model.secs ]
+        [ div [style [ ("display","flex") ]] 
+            [
+            div [ style [ ( "font-size", "60px" ),("type","number") ] ]
+                [ text <| padSingleDigit model.min ]
+            , div [ style [ ( "font-size", "60px" ) ] ]
+                [text ":"]
+            , div [ style [ ( "font-size", "60px" ) ] ]
+                [text <| padSingleDigit model.secs]
+            ]
         , button
             [ style
                 [ ( "width", "100px" )
