@@ -31,6 +31,8 @@ type Msg
     = StartClock
     | StopClock
     | Tick Time
+    | Min String
+    | Sec String
 
 
 initModel : ( Model, Cmd Msg )
@@ -42,9 +44,20 @@ initModel =
 -- UPDATE
 
 
+myStrToInt : String -> Int
+myStrToInt =
+    Result.withDefault 0 << String.toInt
+
+
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        Min newMin ->
+            ( { model | min = myStrToInt newMin }, Cmd.none )
+
+        Sec newSec ->
+            ( { model | secs = myStrToInt newSec }, Cmd.none )
+
         Tick newTime ->
             if model.mode == Start then
                 ( decrementClock model, Cmd.none )
@@ -88,14 +101,23 @@ decrementMin model =
 view : Model -> Html Msg
 view model =
     div []
-        [ div [style [ ("display","flex") ]] 
-            [
-            div [ style [ ( "font-size", "60px" ),("type","number") ] ]
-                [ text <| padSingleDigit model.min ]
-            , div [ style [ ( "font-size", "60px" ) ] ]
-                [text ":"]
-            , div [ style [ ( "font-size", "60px" ) ] ]
-                [text <| padSingleDigit model.secs]
+        [ div [ style [ ( "display", "flex" ) ] ]
+            [ input
+                [ style [ ( "font-size", "50px"), ("width", "80px") ]
+                , type' "number"
+                , onInput Min
+                , value <| padSingleDigit model.min
+                ]
+                []
+            , div [ style [ ("font-size", "50px") ] ]
+                [ text ":" ]
+            , input
+                [ style [ ("font-size", "50px"), ("width","80px") ]
+                , type' "number"
+                , onInput Sec
+                , value <| padSingleDigit model.secs
+                ]
+                []
             ]
         , button
             [ style
