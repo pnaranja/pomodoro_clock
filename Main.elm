@@ -65,7 +65,7 @@ update msg model =
                 ( model, Cmd.none )
 
         StartClock ->
-            ( { model | mode = Start }, Cmd.none )
+            ( checkSec { model | mode = Start }, Cmd.none )
 
         StopClock ->
             ( { model | mode = Stop }, Cmd.none )
@@ -93,7 +93,14 @@ decrementMin model =
     else
         model
 
-
+checkSec : Model -> Model
+checkSec model =
+    if model.secs > 59 then
+        {model | secs = 59}
+    else if model.secs < 0 then
+        {model | secs = 0}
+    else
+        model
 
 -- VIEW
 
@@ -114,6 +121,8 @@ view model =
             , input
                 [ style [ ("font-size", "50px"), ("width","80px") ]
                 , type' "number"
+                , Html.Attributes.max "60"
+                , Html.Attributes.min "0"
                 , onInput Sec
                 , value <| padSingleDigit model.secs
                 ]
