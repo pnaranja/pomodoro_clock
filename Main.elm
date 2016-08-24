@@ -107,9 +107,11 @@ checkSec model =
 
 -- VIEW
 
+
 centerCSS : Attribute Msg
 centerCSS =
-     style [ ( "display", "flex" ), ( "justify-content", "center" ), ( "align-items", "center" ) ]
+    style [ ( "display", "flex" ), ( "justify-content", "center" ), ( "align-items", "center" ) ]
+
 
 numberCSS : Model -> (String -> Msg) -> List (Attribute Msg)
 numberCSS model num =
@@ -123,7 +125,8 @@ numberCSS model num =
 view : Model -> Html Msg
 view model =
     div []
-        [ div [ centerCSS ]
+        [ embed [ src "bell-ringing-01.mp3", hidden False ] []
+        , div [ centerCSS ]
             [ input
                 ([ value <| padSingleDigit model.min ]
                     ++ numberCSS model Min
