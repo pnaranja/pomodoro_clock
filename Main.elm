@@ -107,49 +107,59 @@ checkSec model =
 
 -- VIEW
 
+centerCSS : Attribute Msg
+centerCSS =
+     style [ ( "display", "flex" ), ( "justify-content", "center" ), ( "align-items", "center" ) ]
+
+numberCSS : Model -> (String -> Msg) -> List (Attribute Msg)
+numberCSS model num =
+    [ style [ ( "font-size", "50px" ), ( "width", "80px" ) ]
+    , type' "number"
+    , readOnlyIfRunning model
+    , onInput num
+    ]
+
 
 view : Model -> Html Msg
 view model =
     div []
-        [ div [ style [ ( "display", "flex" ) ] ]
+        [ div [ centerCSS ]
             [ input
-                [ style [ ( "font-size", "50px" ), ( "width", "80px" ) ]
-                , type' "number"
-                , onInput Min
-                , value <| padSingleDigit model.min
-                , readOnlyIfRunning model
-                ]
+                ([ value <| padSingleDigit model.min ]
+                    ++ numberCSS model Min
+                )
                 []
             , div [ style [ ( "font-size", "50px" ) ] ]
                 [ text ":" ]
             , input
-                [ style [ ( "font-size", "50px" ), ( "width", "80px" ) ]
-                , type' "number"
-                , Html.Attributes.max "60"
-                , Html.Attributes.min "0"
-                , onInput Sec
-                , value <| padSingleDigit model.secs
-                , readOnlyIfRunning model
-                ]
+                ([ Html.Attributes.max "60"
+                 , Html.Attributes.min "0"
+                 , value <| padSingleDigit model.secs
+                 ]
+                    ++ numberCSS model Sec
+                )
                 []
             ]
-        , button
-            [ style
-                [ ( "width", "100px" )
-                , ( "height", "60px" )
+        , div [ centerCSS ]
+            [ button
+                [ style
+                    [ ( "width", "100px" )
+                    , ( "height", "60px" )
+                    ]
+                , onClick StartClock
                 ]
-            , onClick StartClock
-            ]
-            [ text "Start" ]
-        , button
-            [ style
-                [ ( "width", "100px" )
-                , ( "height", "60px" )
+                [ text "Start" ]
+            , button
+                [ style
+                    [ ( "width", "100px" )
+                    , ( "height", "60px" )
+                    ]
+                , onClick StopClock
                 ]
-            , onClick StopClock
+                [ text "Stop" ]
             ]
-            [ text "Stop" ]
-        , div [] [ text <| toString model ]
+        , div [ centerCSS ]
+            [ text <| toString model ]
         ]
 
 
