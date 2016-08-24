@@ -93,14 +93,17 @@ decrementMin model =
     else
         model
 
+
 checkSec : Model -> Model
 checkSec model =
     if model.secs > 59 then
-        {model | secs = 59}
+        { model | secs = 59 }
     else if model.secs < 0 then
-        {model | secs = 0}
+        { model | secs = 0 }
     else
         model
+
+
 
 -- VIEW
 
@@ -110,21 +113,23 @@ view model =
     div []
         [ div [ style [ ( "display", "flex" ) ] ]
             [ input
-                [ style [ ( "font-size", "50px"), ("width", "80px") ]
+                [ style [ ( "font-size", "50px" ), ( "width", "80px" ) ]
                 , type' "number"
                 , onInput Min
                 , value <| padSingleDigit model.min
+                , readOnlyIfRunning model
                 ]
                 []
-            , div [ style [ ("font-size", "50px") ] ]
+            , div [ style [ ( "font-size", "50px" ) ] ]
                 [ text ":" ]
             , input
-                [ style [ ("font-size", "50px"), ("width","80px") ]
+                [ style [ ( "font-size", "50px" ), ( "width", "80px" ) ]
                 , type' "number"
                 , Html.Attributes.max "60"
                 , Html.Attributes.min "0"
                 , onInput Sec
                 , value <| padSingleDigit model.secs
+                , readOnlyIfRunning model
                 ]
                 []
             ]
@@ -154,6 +159,14 @@ padSingleDigit i =
         String.padLeft 2 '0' <| toString i
     else
         toString i
+
+
+readOnlyIfRunning : Model -> Attribute Msg
+readOnlyIfRunning model =
+    if (model.mode == Start) then
+        readonly True
+    else
+        readonly False
 
 
 
