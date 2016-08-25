@@ -121,11 +121,18 @@ numberCSS model num =
     , onInput num
     ]
 
+playRing : Model -> Attribute Msg
+playRing model =
+    if (model.min == 0 && model.secs == 0) then
+        autoplay True
+    else
+        autoplay False
+
 
 view : Model -> Html Msg
 view model =
     div []
-        [ embed [ src "bell-ringing-01.mp3", hidden False ] []
+        [ audio [ src "bell-ringing-01.mp3", playRing model ] []
         , div [ centerCSS ]
             [ input
                 ([ value <| padSingleDigit model.min ]
