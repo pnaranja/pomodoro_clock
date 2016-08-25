@@ -12,6 +12,12 @@ import Date
 import String
 
 
+main : Program Never
+main =
+    App.program { init = initModel, update = update, view = view, subscriptions = subscriptions }
+
+
+
 -- Model
 
 
@@ -193,8 +199,3 @@ readOnlyIfRunning model =
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Time.every second Tick
-
-
-main : Program Never
-main =
-    App.program { init = initModel, update = update, view = view, subscriptions = subscriptions }
