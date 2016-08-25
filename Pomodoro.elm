@@ -1,7 +1,7 @@
 -- Pomodoro Clock
 
 
-module Main exposing (..)
+port module Pomodoro exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -30,6 +30,7 @@ type Mode
 type Msg
     = StartClock
     | StopClock
+    | Finish
     | Tick Time
     | Min String
     | Sec String
@@ -37,12 +38,13 @@ type Msg
 
 initModel : ( Model, Cmd Msg )
 initModel =
-    ( { min = 1, secs = 5, mode = Stop }, Cmd.none )
+    ( Model 0 5 Stop, Cmd.none )
 
 
 
 -- UPDATE
 
+port ring : Cmd Msg
 
 myStrToInt : String -> Int
 myStrToInt =
@@ -69,6 +71,9 @@ update msg model =
 
         StopClock ->
             ( { model | mode = Stop }, Cmd.none )
+
+        Finish ->
+            ( { model | mode = Stop }, ring )
 
 
 decrementClock : Model -> Model
@@ -121,19 +126,11 @@ numberCSS model num =
     , onInput num
     ]
 
-playRing : Model -> Attribute Msg
-playRing model =
-    if (model.min == 0 && model.secs == 0) then
-        autoplay True
-    else
-        autoplay False
-
 
 view : Model -> Html Msg
 view model =
     div []
-        [ audio [ src "bell-ringing-01.mp3", playRing model ] []
-        , div [ centerCSS ]
+        [ div [ centerCSS ]
             [ input
                 ([ value <| padSingleDigit model.min ]
                     ++ numberCSS model Min
@@ -201,18 +198,3 @@ subscriptions model =
 main : Program Never
 main =
     App.program { init = initModel, update = update, view = view, subscriptions = subscriptions }
-
-
-
--- Erin's Tutorial Part
--- keyButton label =
---     button [ style [ ( "width", "50px"  ] ]
---         [ text label ]
---
---
--- main =
---     div [ style [ ( "background-color", "red" ) ] ]
---         [ text "Hello World"
---         , b [] [ text "World" ]
---         , keyButton "Something"
---         ]

@@ -1,0 +1,14 @@
+<html>
+    <body>
+        <audio id="theaudio" src="bell-ringing-01.mp3"></audio>
+        <script src="pomodoro.js"></script>
+        <script>
+            var app = Elm.Main.fullscreen();
+
+            app.ports.ring.subscribe(function()
+            {
+                document.getElementById('theaudio').play();            
+            });
+        </script>
+    </body>
+</html>
