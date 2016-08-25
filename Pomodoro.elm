@@ -44,7 +44,9 @@ initModel =
 
 -- UPDATE
 
-port ring : Cmd Msg
+--For Elm 0.17.1, port needs AT LEAST 1 parameter???
+--Reference: https://groups.google.com/forum/#!forum/elm-dev -> topic: "JS interop type confusion"
+port ring :String -> Cmd msg
 
 myStrToInt : String -> Int
 myStrToInt =
@@ -73,7 +75,7 @@ update msg model =
             ( { model | mode = Stop }, Cmd.none )
 
         Finish ->
-            ( { model | mode = Stop }, ring )
+            ( { model | mode = Stop }, ring "" )
 
 
 decrementClock : Model -> Model
