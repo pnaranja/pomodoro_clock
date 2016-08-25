@@ -30,7 +30,6 @@ type Mode
 type Msg
     = StartClock
     | StopClock
-    | Finish
     | Tick Time
     | Min String
     | Sec String
@@ -63,8 +62,10 @@ update msg model =
             ( { model | secs = myStrToInt newSec }, Cmd.none )
 
         Tick newTime ->
-            if model.mode == Start then
+            if model.mode == Start && (model.min > 0 || model.secs > 0) then
                 ( decrementClock model, Cmd.none )
+            else if model.mode == Start && model.min == 0 && model.secs == 0 then
+                ( { model | mode = Stop }, ring "" )
             else
                 ( model, Cmd.none )
 
@@ -73,9 +74,6 @@ update msg model =
 
         StopClock ->
             ( { model | mode = Stop }, Cmd.none )
-
-        Finish ->
-            ( { model | mode = Stop }, ring "" )
 
 
 decrementClock : Model -> Model
