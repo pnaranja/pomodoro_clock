@@ -126,7 +126,7 @@ centerCSS =
 
 numberCSS : Model -> (String -> Msg) -> List (Attribute Msg)
 numberCSS model num =
-    [ style [ ( "font-size", "50px" ), ( "width", "80px" ) ]
+    [ style [ ( "font-size", "50px" ), ( "width", "90px" ) ]
     , type' "number"
     , readOnlyIfRunning model
     , onInput num
