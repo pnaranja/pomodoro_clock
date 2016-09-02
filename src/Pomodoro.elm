@@ -48,10 +48,12 @@ initModel =
 
 
 -- UPDATE
-
 --For Elm 0.17.1, port needs AT LEAST 1 parameter???
 --Reference: https://groups.google.com/forum/#!forum/elm-dev -> topic: "JS interop type confusion"
-port ring :String -> Cmd msg
+
+
+port ring : String -> Cmd msg
+
 
 myStrToInt : String -> Int
 myStrToInt =
@@ -133,6 +135,27 @@ numberCSS model num =
     ]
 
 
+type Start_Stop_btn
+    = StartButton
+    | StopButton
+
+
+hideButtonCSS : Model -> Start_Stop_btn -> Attribute Msg
+hideButtonCSS model btn =
+    case btn of
+        StartButton ->
+            if model.mode == Start then
+                hidden True
+            else
+                hidden False
+
+        StopButton ->
+            if model.mode == Stop then
+                hidden True
+            else
+                hidden False
+
+
 view : Model -> Html Msg
 view model =
     div []
@@ -156,17 +179,19 @@ view model =
         , div [ centerCSS ]
             [ button
                 [ style
-                    [ ( "width", "100px" )
+                    [ ( "width", "200px" )
                     , ( "height", "60px" )
                     ]
+                , hideButtonCSS model StartButton
                 , onClick StartClock
                 ]
                 [ text "Start" ]
             , button
                 [ style
-                    [ ( "width", "100px" )
+                    [ ( "width", "200px" )
                     , ( "height", "60px" )
                     ]
+                , hideButtonCSS model StopButton
                 , onClick StopClock
                 ]
                 [ text "Stop" ]
