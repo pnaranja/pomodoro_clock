@@ -204,6 +204,7 @@ view model =
                     , ( "height", "60px" )
                     , ( "position", "relative" )
                     , ( "top", "30px" )
+                    , ( "font-size", "large" )
                     ]
                 , hideButtonCSS model StartButton
                 , onClick StartClock
@@ -215,6 +216,7 @@ view model =
                     , ( "height", "60px" )
                     , ( "position", "relative" )
                     , ( "top", "30px" )
+                    , ( "font-size", "large" )
                     ]
                 , hideButtonCSS model StopButton
                 , onClick StopClock
