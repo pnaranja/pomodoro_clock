@@ -158,8 +158,23 @@ hideButtonCSS model btn =
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ div [ centerCSS ]
+    div
+        [ style
+            [ ( "background-color", "red" )
+            , ( "width", "250px" )
+            , ( "height", "300px" )
+            , ( "position", "relative" )
+            , ( "top", "50px" )
+            , ( "left", "500px" )
+            ]
+        ]
+        [ div
+            [ centerCSS
+            , style
+                [ ( "position", "relative" )
+                , ( "top", "50px" )
+                ]
+            ]
             [ input
                 ([ value <| padSingleDigit model.min ]
                     ++ numberCSS model Min
@@ -176,11 +191,19 @@ view model =
                 )
                 []
             ]
-        , div [ centerCSS ]
+        , div
+            [ centerCSS
+            , style
+                [ ( "position", "relative" )
+                , ( "top", "50px" )
+                ]
+            ]
             [ button
                 [ style
                     [ ( "width", "200px" )
                     , ( "height", "60px" )
+                    , ( "position", "relative" )
+                    , ( "top", "30px" )
                     ]
                 , hideButtonCSS model StartButton
                 , onClick StartClock
@@ -190,13 +213,21 @@ view model =
                 [ style
                     [ ( "width", "200px" )
                     , ( "height", "60px" )
+                    , ( "position", "relative" )
+                    , ( "top", "30px" )
                     ]
                 , hideButtonCSS model StopButton
                 , onClick StopClock
                 ]
                 [ text "Stop" ]
             ]
-        , div [ centerCSS ]
+        , div
+            [ centerCSS
+            , style
+                [ ( "position", "relative" )
+                , ( "top", "100px" )
+                ]
+            ]
             [ text <| toString model ]
         ]
 
