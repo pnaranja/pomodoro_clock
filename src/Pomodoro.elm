@@ -70,10 +70,13 @@ update msg model =
             ( { model | secs = myStrToInt newSec }, Cmd.none )
 
         Tick newTime ->
-            if model.mode == Start && (model.min > 0 || model.secs > 0) then
-                ( decrementClock model, Cmd.none )
-            else if model.mode == Start && model.min == 0 && model.secs == 0 then
-                ( { model | mode = Stop }, ring "" )
+            if model.mode == Start then
+                case ( model.min, model.secs ) of
+                    ( 0, 0 ) ->
+                        ( { model | mode = Stop }, ring "" )
+
+                    _ ->
+                        ( decrementClock model, Cmd.none )
             else
                 ( model, Cmd.none )
 
